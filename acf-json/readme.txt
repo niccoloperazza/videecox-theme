@@ -1,0 +1,1 @@
+This folder is used by acf to store config datas and therefore to be faster
