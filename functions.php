@@ -32,3 +32,4 @@ include_once 'settings/no-comments.php';
 include_once 'settings/svg-allowed.php';
 include_once 'settings/address-bar-color.php';
 include_once 'settings/avatar-acf.php';
+include_once 'settings/helper-classes.php';
