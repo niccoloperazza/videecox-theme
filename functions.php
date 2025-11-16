@@ -39,4 +39,5 @@ include_once 'settings/address-bar-color.php';
 include_once 'settings/avatar-acf.php';
 include_once 'settings/helper-classes.php';
 include_once 'settings/clean-admin.php';
+include_once 'settings/smooth-animations.php';
 //include_once 'settings/codice-fiscale.php';
