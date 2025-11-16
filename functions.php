@@ -20,6 +20,11 @@ function astra_parent_theme_enqueue_styles()
 		get_stylesheet_directory_uri() . '/style.css',
 		array('astra-style')
 	);
+	wp_enqueue_style(
+		'vid-classes-css',
+		get_stylesheet_directory_uri() . '/vid-classes.css',
+		array('astra-style')
+	);
 }
 add_action('wp_enqueue_scripts', 'astra_parent_theme_enqueue_styles');
 
