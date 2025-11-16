@@ -1,0 +1,280 @@
+/**
+* VID Utility Classes
+* Extracted from style.css
+*/
+
+/* ========================================
+   DISPLAY
+   ======================================== */
+
+.vid-none {
+	display: none;
+}
+
+.vid-hidden {
+	visibility: hidden;
+	display: none !important;
+}
+
+.vid-block {
+	display: block;
+}
+
+.vid-grid {
+	display: grid;
+}
+
+.vid-flex {
+	display: flex;
+}
+
+/* ========================================
+   POSITION
+   ======================================== */
+
+.vid-relative {
+	position: relative;
+}
+
+.vid-absolute {
+	position: absolute;
+}
+
+.vid-sticky {
+	position: sticky;
+}
+
+/* ========================================
+   FLEXBOX LAYOUT
+   ======================================== */
+
+.vid-row {
+	display: flex;
+	flex-direction: row;
+}
+
+.vid-column {
+	display: flex;
+	flex-direction: column;
+}
+
+.vid-wrap {
+	flex-wrap: wrap;
+}
+
+.vid-gap {
+	gap: var(--gap);
+}
+
+/* Alignment */
+.vid-justify-center,
+.vid-j-center {
+	justify-content: center;
+}
+
+.vid-space-beetween {
+	justify-content: space-between;
+}
+
+.vid-end {
+	justify-content: end;
+}
+
+.vid-v-center {
+	display: flex;
+	align-items: center;
+}
+
+.vid-h-end {
+	justify-content: flex-end;
+	display: flex;
+}
+
+.vid-as-end {
+	justify-self: end;
+	float: right;
+	margin: 5px;
+	text-align: right;
+}
+
+/* ========================================
+   WIDTH
+   ======================================== */
+
+.vid-w-20 {
+	width: 20%;
+}
+
+.vid-w-25 {
+	width: 25%;
+}
+
+.vid-w-25-gap {
+	width: calc(25% - var(--gap));
+}
+
+.vid-ws-30 {
+	width: 30%;
+}
+
+.vid-w-33 {
+	width: 33.3333%;
+}
+
+.vid-w-33-gap {
+	width: calc(33.3333% - var(--gap));
+	min-width: calc(33.3333% - var(--gap));
+}
+
+.vid-w-40 {
+	width: 40%;
+}
+
+.vid-ws-40 {
+	width: 40%;
+}
+
+.vid-w-50 {
+	width: 50%;
+}
+
+.vid-ws-50 {
+	width: 50%;
+}
+
+.vid-w-50-gap {
+	width: calc(50% - var(--gap));
+}
+
+.vid-w-60 {
+	width: 60%;
+}
+
+.vid-ws-60 {
+	width: 60%;
+}
+
+.vid-w-70 {
+	width: 70%;
+}
+
+.vid-ws-70 {
+	width: 70%;
+}
+
+.vid-w-80 {
+	width: 80%;
+}
+
+.vid-w-full {
+	width: 100%;
+}
+
+.vid-w-fit {
+	width: fit-content;
+}
+
+/* ========================================
+   SPACING (MARGIN & PADDING)
+   ======================================== */
+
+.vid-p-zero {
+	padding: 0;
+}
+
+.vid-m-zero {
+	margin: 0;
+}
+
+.vid-m-auto {
+	margin: auto;
+}
+
+.vid-m-1-center {
+	margin: 1em auto;
+}
+
+.vid-m-2-center {
+	margin: 2em auto;
+}
+
+/* Spacers */
+.vid-spacer-15,
+.vid-s-15 {
+	min-height: 15px;
+}
+
+.vid-spacer-25,
+.vid-s-25 {
+	min-height: 25px;
+}
+
+/* ========================================
+   TYPOGRAPHY
+   ======================================== */
+
+.vid-uppercase {
+    text-transform: uppercase;
+}
+
+/* ========================================
+   RESPONSIVE UTILITIES
+   ======================================== */
+
+/* Mobile visibility */
+.not-desktop,
+.vid-hide-on-desktop,
+.hide-on-desktop {
+	display: none !important;
+}
+
+@media (max-width: 767.98px) {
+	/* Column direction on mobile */
+	.vid-s-column {
+		flex-direction: column;
+	}
+
+	/* Reverse column on mobile */
+	.vid-s-reverse {
+		display: flex;
+		flex-direction: column-reverse;
+	}
+
+	/* Width responsive */
+	.vid-w-20,
+	.vid-w-25,
+	.vid-w-33,
+	.vid-w-40,
+	.vid-w-50,
+	.vid-w-60,
+	.vid-w-70,
+	.vid-w-80 {
+		width: 100%;
+	}
+
+	.vid-w-25-gap {
+		width: 100%;
+	}
+
+	.vid-w-33-gap {
+		width: 100%;
+		min-width: 100%;
+	}
+
+	.vid-w-50-gap {
+		width: 100%;
+	}
+
+	/* Visibility toggles */
+	.not-mobile,
+	.vid-hide-on-mobile,
+	.hide-on-mobile {
+		display: none;
+	}
+
+	.not-desktop,
+	.vid-hide-on-desktop,
+	.hide-on-desktop {
+		display: flex !important;
+	}
+}
