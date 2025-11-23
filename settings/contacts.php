@@ -187,7 +187,12 @@ function videecox_render_osm_map($lat, $lng, $zoom = 15, $height = '400px') {
     $lng = floatval($lng);
     $zoom = intval($zoom);
 
-    $output = '<div id="' . esc_attr($map_id) . '" class="osm-map" style="width: 100%; height: ' . esc_attr($height) . '; margin-top: 15px; border-radius: 8px; overflow: hidden;"></div>';
+    $output = '<style>
+        a.leaflet-control-zoom-out, a.leaflet-control-zoom-in {
+            text-decoration: none !important;
+        }
+    </style>';
+    $output .= '<div id="' . esc_attr($map_id) . '" class="osm-map" style="width: 100%; height: ' . esc_attr($height) . '; margin-top: 15px; border-radius: 8px; overflow: hidden;"></div>';
     $output .= '<script>
         document.addEventListener("DOMContentLoaded", function() {
             if (typeof L !== "undefined") {
