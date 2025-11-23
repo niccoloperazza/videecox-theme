@@ -41,4 +41,5 @@ include_once 'settings/helper-classes.php';
 include_once 'settings/clean-admin.php';
 include_once 'settings/smooth-animations.php';
 include_once 'settings/business-info.php';
+include_once 'settings/contacts.php';
 //include_once 'settings/codice-fiscale.php';
