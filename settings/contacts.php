@@ -31,6 +31,21 @@ function videecox_contacts_customizer($wp_customize) {
         'priority'    => 10,
     ));
 
+    // Mostra icona WhatsApp
+    $wp_customize->add_setting('videecox_show_whatsapp', array(
+        'default'           => false,
+        'sanitize_callback' => 'wp_validate_boolean',
+        'transport'         => 'refresh',
+    ));
+
+    $wp_customize->add_control('videecox_show_whatsapp', array(
+        'label'       => __('Mostra Icona WhatsApp', 'videecox'),
+        'description' => __('Attiva per mostrare un\'icona WhatsApp floating (richiede il numero di telefono)', 'videecox'),
+        'section'     => 'videecox_contacts',
+        'type'        => 'checkbox',
+        'priority'    => 15,
+    ));
+
     // Email
     $wp_customize->add_setting('videecox_email', array(
         'default'           => '',
@@ -89,21 +104,6 @@ function videecox_contacts_customizer($wp_customize) {
         'section'     => 'videecox_contacts',
         'type'        => 'text',
         'priority'    => 50,
-    ));
-
-    // Mostra icona WhatsApp
-    $wp_customize->add_setting('videecox_show_whatsapp', array(
-        'default'           => false,
-        'sanitize_callback' => 'wp_validate_boolean',
-        'transport'         => 'refresh',
-    ));
-
-    $wp_customize->add_control('videecox_show_whatsapp', array(
-        'label'       => __('Mostra Icona WhatsApp', 'videecox'),
-        'description' => __('Attiva per mostrare un\'icona WhatsApp floating (richiede il numero di telefono)', 'videecox'),
-        'section'     => 'videecox_contacts',
-        'type'        => 'checkbox',
-        'priority'    => 60,
     ));
 }
 
