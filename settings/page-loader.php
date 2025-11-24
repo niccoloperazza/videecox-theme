@@ -190,8 +190,7 @@ function videecox_render_skeleton_loader($color) {
         .skeleton-loading h1,
         .skeleton-loading h2,
         .skeleton-loading h3,
-        .skeleton-loading p,
-        .skeleton-loading img {
+        .skeleton-loading p {
             position: relative;
             overflow: hidden;
             background-color: <?php echo esc_attr($skeleton_color); ?> !important;
@@ -205,8 +204,7 @@ function videecox_render_skeleton_loader($color) {
         .skeleton-loading h1::before,
         .skeleton-loading h2::before,
         .skeleton-loading h3::before,
-        .skeleton-loading p::before,
-        .skeleton-loading img::before {
+        .skeleton-loading p::before {
             content: '';
             position: absolute;
             top: 0;
@@ -220,6 +218,50 @@ function videecox_render_skeleton_loader($color) {
                 transparent
             );
             animation: skeleton-shimmer 1.5s infinite;
+        }
+
+        /* Skeleton styles for images */
+        .skeleton-loading img,
+        .skeleton-loading .wp-block-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .skeleton-loading img {
+            opacity: 0 !important;
+            min-height: 200px;
+            background-color: <?php echo esc_attr($skeleton_color); ?> !important;
+        }
+
+        .skeleton-loading .wp-block-image::before,
+        .skeleton-loading img::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: <?php echo esc_attr($skeleton_color); ?>;
+            z-index: 1;
+        }
+
+        .skeleton-loading .wp-block-image::after,
+        .skeleton-loading img::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                <?php echo esc_attr($skeleton_shimmer); ?>,
+                transparent
+            );
+            animation: skeleton-shimmer 1.5s infinite;
+            z-index: 2;
         }
 
         @keyframes skeleton-shimmer {
