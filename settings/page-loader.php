@@ -264,6 +264,46 @@ function videecox_render_skeleton_loader($color) {
             z-index: 2;
         }
 
+        /* Skeleton styles for maps */
+        .skeleton-loading .osm-map {
+            position: relative;
+            overflow: hidden;
+            min-height: 400px;
+            background-color: <?php echo esc_attr($skeleton_color); ?> !important;
+        }
+
+        .skeleton-loading .osm-map::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: <?php echo esc_attr($skeleton_color); ?>;
+            z-index: 10000;
+        }
+
+        .skeleton-loading .osm-map::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                <?php echo esc_attr($skeleton_shimmer); ?>,
+                transparent
+            );
+            animation: skeleton-shimmer 1.5s infinite;
+            z-index: 10001;
+        }
+
+        .skeleton-loading .osm-map * {
+            opacity: 0 !important;
+        }
+
         @keyframes skeleton-shimmer {
             0% {
                 left: -100%;
