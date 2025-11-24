@@ -2,7 +2,7 @@
 
 /**
  * Page Loader Settings
- * Adds customizer option to enable minimal page transition loader
+ * Adds customizer option for page transition loaders (minimal or skeleton)
  */
 
 // Add page loader section to WordPress Customizer
@@ -12,22 +12,27 @@ function videecox_page_loader_customizer($wp_customize) {
     // Add section
     $wp_customize->add_section('videecox_page_loader', array(
         'title'       => __('Page Loader', 'videecox'),
-        'description' => __('Attiva un loader minimale durante le transizioni tra pagine.', 'videecox'),
+        'description' => __('Scegli il tipo di loader da mostrare durante le transizioni tra pagine.', 'videecox'),
         'priority'    => 35,
     ));
 
-    // Enable page loader
-    $wp_customize->add_setting('videecox_enable_page_loader', array(
-        'default'           => false,
-        'sanitize_callback' => 'wp_validate_boolean',
+    // Loader type selection
+    $wp_customize->add_setting('videecox_loader_type', array(
+        'default'           => 'disabled',
+        'sanitize_callback' => 'videecox_sanitize_loader_type',
         'transport'         => 'refresh',
     ));
 
-    $wp_customize->add_control('videecox_enable_page_loader', array(
-        'label'       => __('Abilita Page Loader', 'videecox'),
-        'description' => __('Mostra un loader minimale durante il caricamento delle pagine', 'videecox'),
+    $wp_customize->add_control('videecox_loader_type', array(
+        'label'       => __('Tipo Loader', 'videecox'),
+        'description' => __('Scegli tra loader minimale (spinner) o skeleton loading', 'videecox'),
         'section'     => 'videecox_page_loader',
-        'type'        => 'checkbox',
+        'type'        => 'select',
+        'choices'     => array(
+            'disabled' => __('Disabilitato', 'videecox'),
+            'minimal'  => __('Loader Minimale (Spinner)', 'videecox'),
+            'skeleton' => __('Skeleton Loading', 'videecox'),
+        ),
         'priority'    => 10,
     ));
 
@@ -40,24 +45,39 @@ function videecox_page_loader_customizer($wp_customize) {
 
     $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'videecox_loader_color', array(
         'label'       => __('Colore Loader', 'videecox'),
-        'description' => __('Scegli il colore del loader', 'videecox'),
+        'description' => __('Colore per il loader (spinner o skeleton)', 'videecox'),
         'section'     => 'videecox_page_loader',
         'priority'    => 20,
     )));
+}
+
+// Sanitize loader type
+function videecox_sanitize_loader_type($input) {
+    $valid = array('disabled', 'minimal', 'skeleton');
+    return in_array($input, $valid, true) ? $input : 'disabled';
 }
 
 // Render page loader in footer
 add_action('wp_footer', 'videecox_render_page_loader');
 
 function videecox_render_page_loader() {
-    $enable_loader = get_theme_mod('videecox_enable_page_loader', false);
+    $loader_type = get_theme_mod('videecox_loader_type', 'disabled');
 
-    if (!$enable_loader) {
+    if ($loader_type === 'disabled') {
         return;
     }
 
     $loader_color = get_theme_mod('videecox_loader_color', '#2c3e50');
 
+    if ($loader_type === 'minimal') {
+        videecox_render_minimal_loader($loader_color);
+    } elseif ($loader_type === 'skeleton') {
+        videecox_render_skeleton_loader($loader_color);
+    }
+}
+
+// Minimal spinner loader
+function videecox_render_minimal_loader($color) {
     ?>
     <style>
         .page-loader {
@@ -86,7 +106,7 @@ function videecox_render_page_loader() {
             width: 40px;
             height: 40px;
             border: 3px solid rgba(0, 0, 0, 0.1);
-            border-top-color: <?php echo esc_attr($loader_color); ?>;
+            border-top-color: <?php echo esc_attr($color); ?>;
             border-radius: 50%;
             animation: page-loader-spin 0.8s linear infinite;
         }
@@ -95,11 +115,6 @@ function videecox_render_page_loader() {
             to {
                 transform: rotate(360deg);
             }
-        }
-
-        /* Hide loader on initial page load to avoid flash */
-        body.page-loading .page-loader {
-            opacity: 0;
         }
     </style>
 
@@ -114,7 +129,6 @@ function videecox_render_page_loader() {
             const loader = document.querySelector('.page-loader');
             let isNavigating = false;
 
-            // Function to show loader
             function showLoader() {
                 if (loader && !isNavigating) {
                     isNavigating = true;
@@ -122,7 +136,6 @@ function videecox_render_page_loader() {
                 }
             }
 
-            // Function to hide loader
             function hideLoader() {
                 if (loader) {
                     isNavigating = false;
@@ -130,7 +143,6 @@ function videecox_render_page_loader() {
                 }
             }
 
-            // Show loader on link clicks (internal links only)
             document.addEventListener('click', function(e) {
                 const link = e.target.closest('a');
 
@@ -138,7 +150,6 @@ function videecox_render_page_loader() {
                     const url = new URL(link.href, window.location.href);
                     const currentUrl = new URL(window.location.href);
 
-                    // Only show loader for internal links (same origin)
                     if (url.origin === currentUrl.origin &&
                         !link.hasAttribute('target') &&
                         !link.getAttribute('href').startsWith('#') &&
@@ -147,36 +158,143 @@ function videecox_render_page_loader() {
                         !link.classList.contains('no-loader')) {
 
                         showLoader();
-
-                        // Fallback to hide loader after 5 seconds
                         setTimeout(hideLoader, 5000);
                     }
                 }
             });
 
-            // Hide loader when page loads
             window.addEventListener('load', hideLoader);
-
-            // Hide loader on page show (for back/forward navigation)
             window.addEventListener('pageshow', function(event) {
-                // If page is loaded from cache
                 if (event.persisted) {
                     hideLoader();
                 }
             });
 
-            // Hide loader if navigation is cancelled
-            window.addEventListener('beforeunload', function() {
-                // Timeout to check if navigation actually happened
-                setTimeout(function() {
-                    if (document.visibilityState === 'visible') {
-                        hideLoader();
+            hideLoader();
+        })();
+    </script>
+    <?php
+}
+
+// Skeleton loader
+function videecox_render_skeleton_loader($color) {
+    // Convert hex to rgb for opacity
+    $rgb = sscanf($color, "#%02x%02x%02x");
+    $skeleton_color = "rgba({$rgb[0]}, {$rgb[1]}, {$rgb[2]}, 0.1)";
+    $skeleton_shimmer = "rgba({$rgb[0]}, {$rgb[1]}, {$rgb[2]}, 0.2)";
+    ?>
+    <style>
+        /* Skeleton Loading Styles */
+        .skeleton-loading article,
+        .skeleton-loading .entry-content > *,
+        .skeleton-loading h1,
+        .skeleton-loading h2,
+        .skeleton-loading h3,
+        .skeleton-loading p,
+        .skeleton-loading img {
+            position: relative;
+            overflow: hidden;
+            background-color: <?php echo esc_attr($skeleton_color); ?> !important;
+            color: transparent !important;
+            border-radius: 4px;
+            pointer-events: none;
+        }
+
+        .skeleton-loading article::before,
+        .skeleton-loading .entry-content > *::before,
+        .skeleton-loading h1::before,
+        .skeleton-loading h2::before,
+        .skeleton-loading h3::before,
+        .skeleton-loading p::before,
+        .skeleton-loading img::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                <?php echo esc_attr($skeleton_shimmer); ?>,
+                transparent
+            );
+            animation: skeleton-shimmer 1.5s infinite;
+        }
+
+        @keyframes skeleton-shimmer {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        /* Hide specific elements during skeleton loading */
+        .skeleton-loading a,
+        .skeleton-loading button,
+        .skeleton-loading input,
+        .skeleton-loading select,
+        .skeleton-loading textarea {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* Smooth transition out of skeleton state */
+        article,
+        .entry-content > *,
+        h1, h2, h3, p, img {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+    </style>
+
+    <script>
+        (function() {
+            'use strict';
+
+            let isNavigating = false;
+
+            function showSkeleton() {
+                if (!isNavigating) {
+                    isNavigating = true;
+                    document.body.classList.add('skeleton-loading');
+                }
+            }
+
+            function hideSkeleton() {
+                isNavigating = false;
+                document.body.classList.remove('skeleton-loading');
+            }
+
+            document.addEventListener('click', function(e) {
+                const link = e.target.closest('a');
+
+                if (link && link.href) {
+                    const url = new URL(link.href, window.location.href);
+                    const currentUrl = new URL(window.location.href);
+
+                    if (url.origin === currentUrl.origin &&
+                        !link.hasAttribute('target') &&
+                        !link.getAttribute('href').startsWith('#') &&
+                        !link.getAttribute('href').startsWith('mailto:') &&
+                        !link.getAttribute('href').startsWith('tel:') &&
+                        !link.classList.contains('no-loader')) {
+
+                        showSkeleton();
+                        setTimeout(hideSkeleton, 5000);
                     }
-                }, 100);
+                }
             });
 
-            // Hide loader on initial page load
-            hideLoader();
+            window.addEventListener('load', hideSkeleton);
+            window.addEventListener('pageshow', function(event) {
+                if (event.persisted) {
+                    hideSkeleton();
+                }
+            });
+
+            hideSkeleton();
         })();
     </script>
     <?php
